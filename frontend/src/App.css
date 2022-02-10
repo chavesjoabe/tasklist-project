@@ -1,0 +1,20 @@
+html {
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #eeeeee;
+}
+
+body {
+  margin: 0;
+}
+
+.App {
+  background-color: #eeeeee;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
