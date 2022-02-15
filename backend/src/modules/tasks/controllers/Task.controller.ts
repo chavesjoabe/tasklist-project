@@ -1,59 +1,71 @@
-import { Request, Response } from 'express';
-import TaskModel from '../../../Models/Tasks/Task.model';
+import { Request, Response } from "express";
+import TaskModel from "../../../Models/Tasks/Task.model";
 
 class TaskController {
-    public async getAll(req: Request, res: Response) {
-        try {
-            const tasks = await TaskModel.find();
+  public async getAll(req: Request, res: Response) {
+    try {
+      const tasks = await TaskModel.find();
 
-            return res.json(tasks);
-        } catch (error) {
-            return res.json({ error });
-        }
+      return res.json(tasks);
+    } catch (error) {
+      return res.json({ error });
     }
-    public async create(req: Request, res: Response) {
-        const { name, date, tag, isDone } = req.body;
+  }
+  public async create(req: Request, res: Response) {
+    const { name, date, tag, isDone } = req.body;
 
-        try {
-            const task = await TaskModel.create({
-                name,
-                date,
-                tag,
-                isDone,
-            });
+    try {
+      const task = await TaskModel.create({
+        name,
+        date,
+        tag,
+        isDone,
+      });
 
-            return res.json(task);
-        } catch (error) {
-            return res.json({ error });
-        }
+      return res.json(task);
+    } catch (error) {
+      return res.json({ error });
     }
-    public async toogleDoneSituation(req: Request, res: Response) {
-        const { id } = req.params;
+  }
+  public async toogleDoneSituation(req: Request, res: Response) {
+    const { id } = req.params;
 
-        const task = await TaskModel.findById(id);
+    const task = await TaskModel.findById(id);
 
-        if (task) {
-            if (task.isDone === false) {
-                task.isDone = true;
-            } else {
-                task.isDone = false;
-            }
-        }
-
-        task.save();
-
-        return res.json(task);
+    if (task) {
+      if (task.isDone === false) {
+        task.isDone = true;
+      } else {
+        task.isDone = false;
+      }
     }
-    public async deleteTask(req: Request, res: Response) {
-        const { id } = req.params;
 
-        const task = await TaskModel.findById(id);
+    task.save();
 
-        if (task) {
-            await TaskModel.deleteOne({ _id: id });
+    return res.json(task);
+  }
+  public async deleteTask(req: Request, res: Response) {
+    const { id } = req.params;
 
-            return res.json({ message: `task ${id} has been deleted` });
-        }
+    const task = await TaskModel.findById(id);
+
+    if (task) {
+      await TaskModel.deleteOne({ _id: id });
+
+      return res.json({ message: `task ${id} has been deleted` });
     }
+  }
+
+  public async getAllDoneTasks(req: Request, res: Response) {
+    const doneTasks = await TaskModel.find({ isDone: true });
+
+    return res.json(doneTasks);
+  }
+
+  public async getAllUndoneTasks(req: Request, res: Response) {
+    const undoneTasks = await TaskModel.find({ isDone: false });
+
+    return res.json(undoneTasks);
+  }
 }
 export default new TaskController();

@@ -1,10 +1,22 @@
-import React, { useState } from "react";
-import Card from "../Card/Card";
-import CardCompleted from "../Card_completed/Card_completed";
+import React, { useEffect, useState } from "react";
+import apiClient from "../../api/api.client";
+import Card from "../Card";
+import CardCompleted from "../Card_completed";
 import "./style.css";
 
 const ListContainer = () => {
   const [showForm, setShowForm] = useState(false);
+  const [doneTasks, setDoneTasks] = useState([]);
+  const [undoneTasks, setUndoneTasks] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const getDoneTasks = await apiClient.getAllDoneTasks();
+      setDoneTasks(getDoneTasks);
+      const getUndoneTasks = await apiClient.getAllUndoneTasks();
+      setUndoneTasks(getUndoneTasks);
+    })();
+  }, []);
 
   const toogleForm = () => {
     if (showForm === false) {
@@ -13,6 +25,8 @@ const ListContainer = () => {
       setShowForm(false);
     }
   };
+
+  const toogleTaskSituation = () => {};
 
   return (
     <div className="container">
@@ -47,15 +61,25 @@ const ListContainer = () => {
         ""
       )}
       <div className="list-card-container">
-        <Card title="Organize photo shoot" date="Today" tag="Work" />
-        <Card title="Buy milk" date="Today" tag="Grocery" />
-        <Card title="keep coding" date="Today" tag="Work" />
+        {undoneTasks.map((task) => (
+          <Card
+            key={task._id}
+            title={task.name}
+            date={task.date}
+            tag={task.tag}
+          />
+        ))}
       </div>
       <div className="list-completed-container">
         <h1 className="task-list-completed-title"> Completed </h1>
-        <CardCompleted title="Organize photo shoot" date="Today" tag="Work" />
-        <CardCompleted title="Organize photo shoot" date="Today" tag="Work" />
-        <CardCompleted title="Organize photo shoot" date="Today" tag="Work" />
+        {doneTasks.map((task) => (
+          <CardCompleted
+            key={task._id}
+            title={task.name}
+            date={task.date}
+            tag={task.tag}
+          />
+        ))}
       </div>
     </div>
   );
