@@ -4,7 +4,7 @@ import TaskModel from "../../../Models/Tasks/Task.model";
 class TaskController {
   public async getAll(req: Request, res: Response) {
     try {
-      const tasks = await TaskModel.find();
+      const tasks = await TaskModel.find().sort({ taksNumber: -1 });
 
       return res.json(tasks);
     } catch (error) {
@@ -14,12 +14,19 @@ class TaskController {
   public async create(req: Request, res: Response) {
     const { name, date, tag, isDone } = req.body;
 
+    const getLastTaskNumber = await TaskModel.find().sort({ taskNumber: -1 });
+
+    const taskNumber = getLastTaskNumber.length
+      ? getLastTaskNumber[0].taskNumber + 1
+      : 1;
+
     try {
       const task = await TaskModel.create({
         name,
         date,
         tag,
         isDone,
+        taskNumber,
       });
 
       return res.json(task);
@@ -57,13 +64,17 @@ class TaskController {
   }
 
   public async getAllDoneTasks(req: Request, res: Response) {
-    const doneTasks = await TaskModel.find({ isDone: true });
+    const doneTasks = await TaskModel.find({ isDone: true }).sort({
+      taskNumber: -1,
+    });
 
     return res.json(doneTasks);
   }
 
   public async getAllUndoneTasks(req: Request, res: Response) {
-    const undoneTasks = await TaskModel.find({ isDone: false });
+    const undoneTasks = await TaskModel.find({ isDone: false }).sort({
+      taskNumber: -1,
+    });
 
     return res.json(undoneTasks);
   }

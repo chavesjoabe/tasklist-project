@@ -6,10 +6,21 @@ const props = {
   tag: String,
 };
 
-const CardCompleted = ({ title, date, tag } = props) => {
+const CardCompleted = ({ title, date, tag, id, callback } = props) => {
+  const handleOnCheck = (id) => {
+    callback(id);
+  };
+
   return (
     <div className="card-completed-container">
-      <input type="checkbox" name="card-check" className="checkbox" />
+      <input
+        type="checkbox"
+        name="card-check"
+        className="checkbox"
+        onChange={() => {
+          handleOnCheck(id);
+        }}
+      />
       <div className="card-completed-description">
         <h2 className="card-completed-title">{title}</h2>
         <p className="card-completed-date">{date}</p>

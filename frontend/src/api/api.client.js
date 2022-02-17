@@ -15,5 +15,17 @@ class ApiClient {
 
     return data;
   }
+
+  async createTask(task) {
+    const { data } = await this.request.post("/create", task);
+
+    return data;
+  }
+
+  async changeTaskSituation(taskId) {
+    const { data } = await this.request.put(`/done/${taskId}`);
+
+    return data;
+  }
 }
 export default new ApiClient();
