@@ -1,42 +1,42 @@
-import axios from "axios";
+import axios from 'axios';
 
 class ApiClient {
-  request = axios.create({
-    baseURL: "http://localhost:3334/",
-  });
-  async getAllDoneTasks() {
-    const { data } = await this.request.get("tasks/done");
+    request = axios.create({
+        baseURL: `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PORT}/`,
+    });
+    async getAllDoneTasks() {
+        const { data } = await this.request.get('tasks/done');
 
-    return data;
-  }
+        return data;
+    }
 
-  async getAllUndoneTasks() {
-    const { data } = await this.request.get("tasks/undone");
+    async getAllUndoneTasks() {
+        const { data } = await this.request.get('tasks/undone');
 
-    return data;
-  }
+        return data;
+    }
 
-  async createTask(task) {
-    const { data } = await this.request.post("tasks/create", task);
+    async createTask(task) {
+        const { data } = await this.request.post('tasks/create', task);
 
-    return data;
-  }
+        return data;
+    }
 
-  async changeTaskSituation(taskId) {
-    const { data } = await this.request.put(`tasks/done/${taskId}`);
+    async changeTaskSituation(taskId) {
+        const { data } = await this.request.put(`tasks/done/${taskId}`);
 
-    return data;
-  }
+        return data;
+    }
 
-  async getAllDates() {
-    const { data } = await this.request.get("/dates");
+    async getAllDates() {
+        const { data } = await this.request.get('/dates');
 
-    return data;
-  }
-  async getAllTags() {
-    const { data } = await this.request.get("/tags");
+        return data;
+    }
+    async getAllTags() {
+        const { data } = await this.request.get('/tags');
 
-    return data;
-  }
+        return data;
+    }
 }
 export default new ApiClient();
