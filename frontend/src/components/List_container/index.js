@@ -14,6 +14,8 @@ const ListContainer = () => {
     tag: "",
   });
   const [reload, setReload] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [dates, setDates] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -21,6 +23,15 @@ const ListContainer = () => {
       setDoneTasks(getDoneTasks);
       const getUndoneTasks = await apiClient.getAllUndoneTasks();
       setUndoneTasks(getUndoneTasks);
+    })();
+  }, [reload]);
+
+  useEffect(() => {
+    (async () => {
+      const getAllTags = await apiClient.getAllTags();
+      setTags(getAllTags);
+      const getAllDates = await apiClient.getAllDates();
+      setDates(getAllDates);
     })();
   }, [reload]);
 
@@ -92,9 +103,9 @@ const ListContainer = () => {
               }}
             >
               <option hidden>Select Date</option>
-              <option value="Date1">Date 1</option>
-              <option value="Date2">Date 2</option>
-              <option value="Date3">Date 3</option>
+              {dates.map((date) => (
+                <option value={date.name}>{date.name}</option>
+              ))}
             </select>
             <select
               type="select"
@@ -107,9 +118,9 @@ const ListContainer = () => {
               }}
             >
               <option hidden>Select a Tag</option>
-              <option value="Tag1">Tag 1</option>
-              <option value="Tag2">Tag 2</option>
-              <option value="Tag3">Tag 3</option>
+              {tags.map((tag) => (
+                <option value={tag.name}>{tag.name}</option>
+              ))}
             </select>
             <button
               className="task-list-input-btn"
